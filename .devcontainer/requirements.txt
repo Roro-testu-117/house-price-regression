@@ -1,0 +1,21 @@
+# データ分析ライブラリ
+numpy
+pandas
+scikit-learn
+scipy
+pycaret
+matplotlib
+japanize_matplotlib
+tensorflow
+seaborn
+ydata-profiling
+lightgbm
+xgboost
+catboost
+mecab-python3
+optuna
+#networkx
+#Plotly
+#opencv-python
+#openpyxl
+#pandas-datareader

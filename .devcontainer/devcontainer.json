@@ -1,0 +1,29 @@
+{
+  "name": "python3",
+  "dockerComposeFile": "./compose.yaml",
+  "service": "py3",
+  "workspaceFolder": "/workspace", //compose.yamlのvolumesで共有した部分
+  "customizations": {
+    "vscode": {
+      // 拡張機能
+      "extensions": [
+        "ms-toolsai.jupyter",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "oderwat.indent-rainbow",
+        "ms-python.isort",
+        "shardulm94.trailing-spaces",
+        "sourcegraph.cody-ai", // Cody AI
+        //"Codeium.codeium" // Codeium
+        // "GitHub.copilot"
+      ],
+      // vscodeの設定
+      "settings": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+	      "editor.formatOnSave": true,
+	      "notebook.formatOnSave.enabled": true
+      }
+    }
+  }
+}
