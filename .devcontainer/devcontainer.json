@@ -13,9 +13,9 @@
         "oderwat.indent-rainbow",
         "ms-python.isort",
         "shardulm94.trailing-spaces",
-        "sourcegraph.cody-ai", // Cody AI
+        // "sourcegraph.cody-ai", // Cody AI
         //"Codeium.codeium" // Codeium
-        // "GitHub.copilot"
+        "GitHub.copilot"
       ],
       // vscodeの設定
       "settings": {
