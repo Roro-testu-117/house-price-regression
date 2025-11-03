@@ -130,7 +130,6 @@ def xgb_train_cv(
         y_tr, y_val = input_y.iloc[tr_idx], input_y.iloc[val_idx]
 
         model = xgb.XGBRegressor(**params)
-        print("学習中...")
         model.fit(
             x_tr,
             y_tr,
@@ -138,7 +137,6 @@ def xgb_train_cv(
             verbose=100,
         )
 
-        print("予測 & 精度計算中...")
         y_tr_preds = model.predict(x_tr)
         y_val_preds = model.predict(x_val)
         metric_tr = round(rmse(y_tr, y_tr_preds), 5)
@@ -179,19 +177,16 @@ def lasso_train_cv(
     input_x: pd.DataFrame,
     input_y: pd.Series,
     input_test_x: pd.DataFrame,
-    params: Dict[str, Any],
     n_splits: int = 5,
-) -> Tuple[pd.DataFrame, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Lasso回帰を用いてクロスバリデーションを行い、モデルの性能を評価・予測する関数。
 
     Example(タプルアンパック):
-    imp, scores, test_preds, val_preds = lasso_train_cv(
-      X_train, y_train, X_test, params, n_splits=5
+    scores, test_preds, val_preds = lasso_train_cv(
+      X_train, y_train, X_test, n_splits=5
     )
     """
-
-    from sklearn.linear_model import Lasso
 
     scores = []
     val_preds = np.zeros(len(input_x))
@@ -206,7 +201,7 @@ def lasso_train_cv(
         x_tr, x_val = input_x.iloc[tr_idx], input_x.iloc[val_idx]
         y_tr, y_val = input_y.iloc[tr_idx], input_y.iloc[val_idx]
 
-        model = Lasso(**params)
+        model = Lasso(alpha=0.0005, random_state=1)  # alpha=0.0015
         model.fit(x_tr, y_tr)
 
         y_tr_preds = model.predict(x_tr)
@@ -220,12 +215,10 @@ def lasso_train_cv(
         y_test_preds = model.predict(input_test_x)
         test_preds += y_test_preds
 
-        imp = pd.DataFrame({"col": input_x.columns, "imp": model.coef_})
-
     scores = np.array(scores)
     test_preds /= n_splits
 
-    return imp, scores, test_preds, val_preds
+    return scores, test_preds, val_preds
 
 
 # =====================================================
@@ -235,15 +228,14 @@ def ridge_train_cv(
     input_x: pd.DataFrame,
     input_y: pd.Series,
     input_test_x: pd.DataFrame,
-    params: Dict[str, Any],
     n_splits: int = 5,
-) -> Tuple[pd.DataFrame, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     リッジ回帰を用いてクロスバリデーションを行い、モデルの性能を評価・予測する関数。
 
     Example(タプルアンパック):
-    imp, scores, test_preds, val_preds = ridge_train_cv(
-      X_train, y_train, X_test, params, n_splits=5
+    scores, test_preds, val_preds = ridge_train_cv(
+      X_train, y_train, X_test, n_splits=5
     )
     """
 
@@ -262,7 +254,7 @@ def ridge_train_cv(
         x_tr, x_val = input_x.iloc[tr_idx], input_x.iloc[val_idx]
         y_tr, y_val = input_y.iloc[tr_idx], input_y.iloc[val_idx]
 
-        model = Ridge(**params)
+        model = Ridge(alpha=10, random_state=1)  # 10,12,15
         model.fit(x_tr, y_tr)
 
         y_tr_preds = model.predict(x_tr)
@@ -276,9 +268,7 @@ def ridge_train_cv(
         y_test_preds = model.predict(input_test_x)
         test_preds += y_test_preds
 
-        imp = pd.DataFrame({"col": input_x.columns, "imp": model.coef_})
-
     scores = np.array(scores)
     test_preds /= n_splits
 
-    return imp, scores, test_preds, val_preds
+    return scores, test_preds, val_preds
